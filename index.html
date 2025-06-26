@@ -14,6 +14,10 @@
             <input type="text" id="bin" placeholder="Ej: xxxxxx" maxlength="16">
         </div>
         <div class="form-group">
+            <label for="generateDate">Generar fecha (mes/año):</label>
+            <input type="checkbox" id="generateDate" checked>
+        </div>
+        <div class="form-group date-options">
             <label for="month">Mes:</label>
             <select id="month">
                 <option value="random">Aleatorio</option>
@@ -31,7 +35,7 @@
                 <option value="12">12</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group date-options">
             <label for="year">Año:</label>
             <select id="year">
                 <option value="random">Aleatorio</option>

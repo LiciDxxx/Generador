@@ -2,6 +2,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const generateBtn = document.getElementById('generate');
     const copyBtn = document.getElementById('copy');
     const resultArea = document.getElementById('result');
+    const generateDateCheckbox = document.getElementById('generateDate');
+    const dateOptions = document.querySelectorAll('.date-options');
+    
+    // Toggle date options visibility based on checkbox
+    function toggleDateOptions() {
+        const isChecked = generateDateCheckbox.checked;
+        dateOptions.forEach(option => {
+            option.style.display = isChecked ? 'block' : 'none';
+        });
+    }
+    
+    // Initialize date options visibility
+    toggleDateOptions();
+    generateDateCheckbox.addEventListener('change', toggleDateOptions);
     
     // Implementación correcta del algoritmo de Luhn
     function generateValidCardNumber(bin) {
@@ -76,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Genera una sola tarjeta
-    function generateSingleCard(binInput, monthInput, yearInput, cvvChecked) {
+    function generateSingleCard(binInput, generateDateChecked, monthInput, yearInput, cvvChecked) {
         // Generar número de tarjeta válido
         const cardNumber = generateValidCardNumber(binInput);
         
@@ -84,26 +98,35 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isValidLuhn(cardNumber)) {
             console.error("Número de tarjeta inválido generado:", cardNumber);
             // Intentar generar otro número si este no es válido
-            return generateSingleCard(binInput, monthInput, yearInput, cvvChecked);
+            return generateSingleCard(binInput, generateDateChecked, monthInput, yearInput, cvvChecked);
         }
-        
-        // Generar mes
-        const month = monthInput === 'random' ? generateMonth() : monthInput;
-        
-        // Generar año
-        const year = yearInput === 'random' ? generateYear() : yearInput;
-        
-        // Formatear año para mostrar solo los últimos 2 dígitos
-        const yearFormatted = year.toString().substr(-2);
-        
-        // Generar CVV si está marcado
-        const cvv = cvvChecked ? generateCVV() : '';
         
         // Formatear en formato PIPE
         let cardData = cardNumber;
-        cardData += '|' + month;
-        cardData += '|' + yearFormatted;
+        
+        // Añadir fecha solo si está marcada la opción
+        if (generateDateChecked) {
+            // Generar mes
+            const month = monthInput === 'random' ? generateMonth() : monthInput;
+            
+            // Generar año
+            const year = yearInput === 'random' ? generateYear() : yearInput;
+            
+            // Formatear año para mostrar solo los últimos 2 dígitos
+            const yearFormatted = year.toString().substr(-2);
+            
+            cardData += '|' + month;
+            cardData += '|' + yearFormatted;
+        } else {
+            // Si no se genera fecha, añadir separadores vacíos si se va a añadir CVV
+            if (cvvChecked) {
+                cardData += '||';
+            }
+        }
+        
+        // Generar CVV si está marcado
         if (cvvChecked) {
+            const cvv = generateCVV();
             cardData += '|' + cvv;
         }
         
@@ -113,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Genera datos de tarjeta en formato PIPE
     function generateCard() {
         const binInput = document.getElementById('bin').value.trim();
+        const generateDateChecked = document.getElementById('generateDate').checked;
         const monthInput = document.getElementById('month').value;
         const yearInput = document.getElementById('year').value;
         const cvvChecked = document.getElementById('cvv').checked;
@@ -138,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Generar la cantidad solicitada de tarjetas
         for (let i = 0; i < quantity; i++) {
-            results.push(generateSingleCard(binInput, monthInput, yearInput, cvvChecked));
+            results.push(generateSingleCard(binInput, generateDateChecked, monthInput, yearInput, cvvChecked));
         }
         
         resultArea.value = results.join('\n');

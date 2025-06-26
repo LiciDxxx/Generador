@@ -82,3 +82,19 @@ textarea {
 #copy:hover {
     background-color: #0b7dda;
 }
+
+.date-options {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.date-options.hidden {
+    display: none;
+}
+
+/* Checkbox styling for better visibility */
+input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-right: 5px;
+    vertical-align: middle;
+}
