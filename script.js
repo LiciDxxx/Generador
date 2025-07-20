@@ -78,10 +78,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return month < 10 ? '0' + month : '' + month;
     }
     
-    // Genera un año aleatorio (entre el año actual y el año actual + 7)
+    // Genera un año aleatorio (entre el año actual y 2040)
     function generateYear() {
         const currentYear = new Date().getFullYear();
-        return Math.floor(Math.random() * 8) + currentYear;
+        const maxYear = 2040;
+        return Math.floor(Math.random() * (maxYear - currentYear + 1)) + currentYear;
     }
     
     // Genera un CVV aleatorio (3 dígitos)
@@ -89,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return Math.floor(Math.random() * 900) + 100;
     }
     
-    // Genera una sola tarjeta
+        // Genera una sola tarjeta
     function generateSingleCard(binInput, generateDateChecked, monthInput, yearInput, cvvChecked) {
         // Generar número de tarjeta válido
         const cardNumber = generateValidCardNumber(binInput);
@@ -112,8 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Generar año
             const year = yearInput === 'random' ? generateYear() : yearInput;
             
-            // Formatear año para mostrar solo los últimos 2 dígitos
-            const yearFormatted = year.toString().substr(-2);
+            // Usar el año completo en lugar de solo los últimos 2 dígitos
+            const yearFormatted = year.toString();
             
             cardData += '|' + month;
             cardData += '|' + yearFormatted;
